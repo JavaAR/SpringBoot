@@ -1,0 +1,58 @@
+spring:
+#Swagger注入
+  swagger:
+    swaggerScanLocations: com.deepblue.punchcard.controller
+#Druid监控注入
+  druid:
+    allowIp: 192.168.3.51,127.0.0.1
+    denyIp: 192.168.3.100
+    loginUsername: admin
+    loginPassword: 123456
+    resetEnable: false
+    exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+#静态资源放行注入,全局拦截器规则注入,放行规则注入
+  request:
+    url: /static/**
+    path: classpath:/static/
+    interceptUrl: /api/**
+    excludeInterceptUrls:
+     /api/userLogin,
+     /api/userLoginOut
+#Druid 数据池配置注入
+  datasource:
+    url: jdbc:mysql://localhost:0710/test?useUnicode=true&characterEncoding=utf-8
+    username: root
+    driverClassName: com.mysql.jdbc.Driver
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+    #配置初始化大小，最小，最大
+    initialSize: 5
+    minIdle: 10
+    maxActive: 20
+    #配置获取连接等待的超时时间
+    maxWait: 60000
+    #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    timeBetweenEvictionRunsMillis: 60000
+    #配置一个连接在池中最小的生存时间，单位是毫秒
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: select 1
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    #打开PSCatch 并且指定每个PSCatch的大小
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    #配置监控统计的拦截的filters
+    filters: stat,wall,slf4j
+    #通过connectionProperties属性打开mergeSql功能；慢sql记录
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    #合并多个DruidDataSource
+    useGlobalDataSourceStat: true
+#如果访问路径不存在 则抛出异常(关闭SpringBoot自带的404处理)
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+
+
+
