@@ -52,6 +52,8 @@ public class WebConfiguration implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        System.out.println(intercept);
+        System.out.println(excludeInterceptUrls);
         registry.addInterceptor(customInterceptors).addPathPatterns(intercept).excludePathPatterns(excludeInterceptUrls);
     }
 
@@ -66,7 +68,7 @@ public class WebConfiguration implements WebMvcConfigurer {
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
             logger.info(request.getRequestURI());
             //自定义拦截规则规则
-
+            System.out.println("我被拦截了");
             return true;
         }
     }

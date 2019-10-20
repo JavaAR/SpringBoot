@@ -1,4 +1,4 @@
-package com.deepblue.punchcard.dto;
+package com.deepblue.punchcard.constant;
 
 /**
  * 错误码

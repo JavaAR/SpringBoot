@@ -3,7 +3,7 @@ package com.deepblue.punchcard.configuration;
 import com.deepblue.punchcard.customException.ServiceException;
 import com.deepblue.punchcard.dto.Dto;
 import com.deepblue.punchcard.dto.DtoUtils;
-import com.deepblue.punchcard.dto.ErrorCode;
+import com.deepblue.punchcard.constant.ErrorCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -48,6 +48,8 @@ public class GlobalExceptionConfiguration {
    public Dto customException(ServiceException sex){
      return exceptionResultFormat(ErrorCode.SERVICEEXCEPTIONCODE,sex);
    }
+
+
     /**
      * 其他异常
      * @param e

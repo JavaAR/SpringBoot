@@ -29,7 +29,7 @@ public class UserInfoController {
      * @param id
      * @return
      */
-    @GetMapping("/userLogOut")
+    @GetMapping("/userLogin")
     public Dto getUserInfoById(Integer id){
         UserInfo userInfo = userInfoService.selectUserInfoById(id);
         if(userInfo!=null){
@@ -65,5 +65,4 @@ public class UserInfoController {
         }
         return DtoUtils.returnFail("没有找到","20001");
     }
-
 }
