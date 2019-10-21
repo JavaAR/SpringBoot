@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.${package}.mapper.${lowerClassName}.${table.className}Mapper">
+<mapper namespace="${basePackageDao}.${modelNameUpperCamel}Mapper">
 
-    <select id="get${table.className}ById" resultType="cn.${package}.pojo.${table.className}" >
+    <select id="get${table.className}ById" resultType="${basePackageModel}.${modelNameUpperCamel}" >
         select
         <#list table.cloumns as cloumn>
             <#if cloumn_has_next>
@@ -21,7 +21,7 @@
         </trim>
     </select>
 
-    <select id="get${table.className}ListByMap" resultType="cn.${package}.pojo.${table.className}" parameterType="java.util.Map">
+    <select id="get${table.className}ListByMap" resultType="${basePackageModel}.${modelNameUpperCamel}" parameterType="java.util.Map">
         select
         <#list table.cloumns as cloumn>
             <#if cloumn_has_next>
@@ -63,7 +63,7 @@
         </trim>
     </select>
 
-    <insert id="insert${table.className}" parameterType="cn.${package}.pojo.${table.className}">
+    <insert id="insert${table.className}" parameterType="${basePackageModel}.${modelNameUpperCamel}">
         insert into ${table.tableName}(
         <#list table.cloumns as cloumn>
                 <#if cloumn_has_next>
@@ -90,7 +90,7 @@
         </#list>
     </insert>
 
-    <update id="update${table.className}" parameterType="cn.${package}.pojo.${table.className}">
+    <update id="update${table.className}" parameterType="${basePackageModel}.${modelNameUpperCamel}">
         update ${table.tableName}
         <trim prefix="set" suffixOverrides="," suffix="where id=${r"#{"}id}">
             <#list table.cloumns as cloumn>

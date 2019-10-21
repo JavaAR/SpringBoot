@@ -28,11 +28,9 @@ public class CodeGeneratorUtil {
     //模板位置
     private final static String TEMPLATE_FILE_PATH="src/main/resources/templates";
     private static final String JAVA_PATH = "src/main/java"; // java文件路径
-    private static final String RESOURCES_PATH = "src/main/resources";// 资源文件路径
+    private static final String RESOURCES_PATH = "src/main/resources/mapper/";// 资源文件路径
     //生成实体类的位置
     private static final String PACKAGE_PATH_POJO = packageConvertPath(ProjectConstant.MODEL_PACKAGE);
-    //生成mapper.xml文件的位置
-    private static final String PACKAGE_PATH_MAPPER = packageConvertPath(RESOURCES_PATH+"/mapper");
     //生成dao接口的文件位置
     private static final String PACKAGE_PATH_DAO = packageConvertPath(ProjectConstant.MAPPER_PACKAGE);
     //生成Service接口的位置
@@ -46,7 +44,9 @@ public class CodeGeneratorUtil {
 
 
     public static void main(String[] args) {
-        genCode("system_log");
+        genCode("system_log");//生成dao接口
+        genModel();
+        genMapper();
     }
 
 
@@ -59,11 +59,62 @@ public class CodeGeneratorUtil {
 
     //通过数据表名称生成代码，Model 名称通过解析数据表名称获得，下划线转大驼峰的形式。 如输入表名称 "t_user_detail" 将生成TUserDetail、TUserDetailMapper、TUserDetailService ...(重载)
     public static void genCode(String tableName) {
-        //genService(tableName);
-        genModel();
+        genService(tableName);
+        genDao(tableName);
+
     }
-    //生成mapper
-    private static void genMapper(String tableName) {
+
+    //生成mapper.xml文件
+    private static void genMapper(){
+        try {
+            //获取表信息以及字段信息
+            List<Table> tables = collectionDB(JDBC_URL, JDBC_DRIVER, JDBC_USERNAME, JDBC_PASSWORD);
+            //组织模板需要的参数
+            Configuration cfg = getConfiguration();
+            for (Table table : tables) {
+                HashMap<Object, Object> Map = new HashMap<>();
+                Map.put("basePackageModel",ProjectConstant.MODEL_PACKAGE);
+                String modelNameUpperCamel = tableNameConvertUpperCamel(table.getTableName());
+                Map.put("modelNameUpperCamel",modelNameUpperCamel);
+                Map.put("basePackageDao", ProjectConstant.MAPPER_PACKAGE);
+                Map.put("table",table);
+                Map.put("date", DATE);
+                Map.put("author", AUTHOR);
+                File file = new File(  RESOURCES_PATH + modelNameUpperCamel + "Mapper.xml");
+                if(!file.getParentFile().exists()){
+                    file.getParentFile().mkdirs();
+                }
+                cfg.getTemplate("mapper.ftl").process(Map,new FileWriter(file));
+                System.out.println(modelNameUpperCamel+".xml:生成成功");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    //生成dao接口
+    private static void genDao(String tableName) {
+        try {
+            Configuration cfg = getConfiguration();
+            //模板所需要的参数
+            Map<String, Object> data = new HashMap<>();
+            data.put("date", DATE);
+            data.put("author", AUTHOR);
+            String modelNameUpperCamel = tableNameConvertUpperCamel(tableName);
+            data.put("modelNameUpperCamel", modelNameUpperCamel);
+            data.put("modelNameLowerCamel", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel));
+            data.put("basePackage", ProjectConstant.BASE_PACKAGE);
+            data.put("basePackageDao", ProjectConstant.MAPPER_PACKAGE);
+            data.put("basePackageModel", ProjectConstant.MODEL_PACKAGE);
+            //生成mapper接口
+            File file = new File(JAVA_PATH + PACKAGE_PATH_DAO + modelNameUpperCamel + "Mapper.java");
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+            cfg.getTemplate("clazzMapper.ftl").process(data, new FileWriter(file));
+            System.out.println(modelNameUpperCamel + "mapper.java 生成成功");
+        } catch (Exception e) {
+            throw new RuntimeException("生成dao失败", e);
+        }
 
     }
     //生成service和serviceImpl
@@ -100,37 +151,34 @@ public class CodeGeneratorUtil {
             throw new RuntimeException("生成Service失败", e);
         }
     }
-    //表名大写
-    private static String tableNameConvertUpperCamel(String tableName) {
-         return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableName.toLowerCase());
-    }
 
     //生成Model
     private static void genModel() {
-
         try {
             //获取表信息以及字段信息
             List<Table> tables = collectionDB(JDBC_URL, JDBC_DRIVER, JDBC_USERNAME, JDBC_PASSWORD);
+            //组织模板需要的参数
+            Configuration cfg = getConfiguration();
             for (Table table : tables) {
-                System.out.println("表名"+table.getTableName());
-                System.out.println("表注释"+table.getComment());
-                List<Cloumn> cloumns = table.getCloumns();
-                for (Cloumn cloumn : cloumns) {
-                    System.out.println("字段名："+cloumn.getCloumnName());
-                    System.out.println("字段类型"+cloumn.getCloumnType());
-                    System.out.println("字段注释"+cloumn.getComment());
-                    System.out.println("字段java注释"+cloumn.getJavaType());
-                }
-            }
+                HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
+                objectObjectHashMap.put("basePackageModel",ProjectConstant.MODEL_PACKAGE);
+                String modelNameUpperCamel = tableNameConvertUpperCamel(table.getTableName());
+                objectObjectHashMap.put("modelNameUpperCamel",modelNameUpperCamel);
+                objectObjectHashMap.put("table",table);
+                objectObjectHashMap.put("date", DATE);
+                objectObjectHashMap.put("author", AUTHOR);
 
+                File file = new File(JAVA_PATH + PACKAGE_PATH_POJO + modelNameUpperCamel + ".java");
+                if(!file.getParentFile().exists()){
+                    file.getParentFile().mkdirs();
+                }
+                cfg.getTemplate("model.ftl").process(objectObjectHashMap,new FileWriter(file));
+                System.out.println(modelNameUpperCamel+".java:生成成功");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
-
-
 
     //连接数据库 返回表和字段信息
     private static List<Table> collectionDB(String url,String driver,String username,String password) {
@@ -189,6 +237,10 @@ public class CodeGeneratorUtil {
         stmt.close();
         conn.close();
         return comment;
+    }
+    //去掉下划线驼峰命名
+    private static String tableNameConvertUpperCamel(String tableName) {
+        return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableName.toLowerCase());
     }
     //格式化表的注释信息
     private static String parse(String all) {

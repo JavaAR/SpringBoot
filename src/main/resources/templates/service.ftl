@@ -16,11 +16,11 @@ public interface ${modelNameUpperCamel}Service {
 
     public Integer get${modelNameUpperCamel}CountByMap(Map<String,Object> param)throws Exception;
 
-    public Integer Add${modelNameUpperCamel}(${modelNameUpperCamel} ${modelNameLowerCamel})throws Exception;
+    public Integer insert${modelNameUpperCamel}(${modelNameUpperCamel} ${modelNameLowerCamel})throws Exception;
 
-    public Integer Modify${modelNameUpperCamel}(${modelNameUpperCamel} ${modelNameLowerCamel})throws Exception;
+    public Integer update${modelNameUpperCamel}(${modelNameUpperCamel} ${modelNameLowerCamel})throws Exception;
 
-    public Integer Delete${modelNameUpperCamel}ById(Long id)throws Exception;
+    public Integer delete${modelNameUpperCamel}ById(Long id)throws Exception;
 
 
 }

@@ -52,8 +52,6 @@ public class WebConfiguration implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        System.out.println(intercept);
-        System.out.println(excludeInterceptUrls);
         registry.addInterceptor(customInterceptors).addPathPatterns(intercept).excludePathPatterns(excludeInterceptUrls);
     }
 

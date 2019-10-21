@@ -1,9 +1,10 @@
-package cn.${package}.pojo;
+package ${basePackageModel};
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
+import javax.persistence.Column;
 /**
-*@Description: ${modelNameUpperCamel}Service接口
+*@Description: ${modelNameUpperCamel}实体类
 *@author ${author}
 *@date ${date}
 */
@@ -11,6 +12,7 @@ import lombok.Data;
 public class ${modelNameUpperCamel} implements Serializable {
         <#list table.cloumns as cloumn>
         //${cloumn.comment}
+        @Column(name = "${cloumn.cloumnName}")
         private ${cloumn.javaType} ${cloumn.fieldName};
         </#list>
 }

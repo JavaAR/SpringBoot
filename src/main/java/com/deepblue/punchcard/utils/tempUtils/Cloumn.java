@@ -39,5 +39,27 @@ public class Cloumn {
         return TypeConstant.getJavaType(this.cloumnType);
     }
 
+    public String getFieldName() {
+        return putOffUnderline(this.cloumnName);
+    }
+
+    //去掉下划线并且按驼峰命名规则转换
+    private  String putOffUnderline(String columnName) {
+        StringBuffer fieldNameBuffer = null;
+        String tempNameArray[] = columnName.split("_");
+        for (int i = 0; i < tempNameArray.length; i++) {
+            if (i == 0) {
+                fieldNameBuffer = new StringBuffer(tempNameArray[i]);
+            } else {
+                fieldNameBuffer.append(captureName(tempNameArray[i]));
+            }
+        }
+        return fieldNameBuffer.toString();
+    }
+    //首字母大写
+    private  String captureName(String name) {
+        name = name.substring(0, 1).toUpperCase() + name.substring(1);
+        return name;
+    }
 
 }
