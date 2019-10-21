@@ -2,10 +2,8 @@ package com.deepblue.punchcard.utils.tempUtils;
 
 import com.deepblue.punchcard.constant.ProjectConstant;
 import com.google.common.base.CaseFormat;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
-import jdk.nashorn.internal.objects.annotations.Where;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -21,7 +19,7 @@ import java.util.Date;
 public class CodeGeneratorUtil {
 
     //jdbc配置
-    private final static String JDBC_URL="jdbc:mysql://localhost:0710/test";
+    private final static String JDBC_URL="jdbc:mysql://localhost:0710/itripdb";
     private final static String JDBC_USERNAME ="root";
     private final static String JDBC_PASSWORD ="123456";
     private final static String JDBC_DRIVER ="com.mysql.jdbc.Driver";
@@ -44,24 +42,11 @@ public class CodeGeneratorUtil {
 
 
     public static void main(String[] args) {
-        genCode("system_log");//生成dao接口
+       //genCode("system_log");//生成dao接口
         genModel();
         genMapper();
-    }
-
-
-    //通过数据表名称生成代码，Model 名称通过解析数据表名称获得，下划线转大驼峰的形式。 如输入表名称 "t_user_detail" 将生成TUserDetail、TUserDetailMapper、TUserDetailService ...
-    public static void genCode(String... tableNames) {
-        for (String tableName : tableNames) {
-            genCode(tableName);
-        }
-    }
-
-    //通过数据表名称生成代码，Model 名称通过解析数据表名称获得，下划线转大驼峰的形式。 如输入表名称 "t_user_detail" 将生成TUserDetail、TUserDetailMapper、TUserDetailService ...(重载)
-    public static void genCode(String tableName) {
-        genService(tableName);
-        genDao(tableName);
-
+        genDao();
+        genService();
     }
 
     //生成mapper.xml文件
@@ -92,61 +77,67 @@ public class CodeGeneratorUtil {
         }
     }
     //生成dao接口
-    private static void genDao(String tableName) {
+    private static void genDao() {
         try {
+            List<Table> tables = collectionDB(JDBC_URL, JDBC_DRIVER, JDBC_USERNAME, JDBC_PASSWORD);
+            //组织模板需要的参数
             Configuration cfg = getConfiguration();
-            //模板所需要的参数
-            Map<String, Object> data = new HashMap<>();
-            data.put("date", DATE);
-            data.put("author", AUTHOR);
-            String modelNameUpperCamel = tableNameConvertUpperCamel(tableName);
-            data.put("modelNameUpperCamel", modelNameUpperCamel);
-            data.put("modelNameLowerCamel", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel));
-            data.put("basePackage", ProjectConstant.BASE_PACKAGE);
-            data.put("basePackageDao", ProjectConstant.MAPPER_PACKAGE);
-            data.put("basePackageModel", ProjectConstant.MODEL_PACKAGE);
-            //生成mapper接口
-            File file = new File(JAVA_PATH + PACKAGE_PATH_DAO + modelNameUpperCamel + "Mapper.java");
-            if (!file.getParentFile().exists()) {
-                file.getParentFile().mkdirs();
+            for (Table table : tables) {
+                HashMap<Object, Object> map = new HashMap<>();
+                map.put("basePackageModel",ProjectConstant.MODEL_PACKAGE);
+                String modelNameUpperCamel = tableNameConvertUpperCamel(table.getTableName());
+                map.put("modelNameUpperCamel",modelNameUpperCamel);
+                map.put("modelNameLowerCamel",CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel));
+                map.put("basePackageDao", ProjectConstant.MAPPER_PACKAGE);
+                map.put("table",table);
+                map.put("date", DATE);
+                map.put("author", AUTHOR);
+                File file = new File(       JAVA_PATH+ PACKAGE_PATH_DAO+ modelNameUpperCamel + "Mapper.java");
+                if(!file.getParentFile().exists()){
+                    file.getParentFile().mkdirs();
+                }
+                cfg.getTemplate("clazzMapper.ftl").process(map,new FileWriter(file));
+                System.out.println(modelNameUpperCamel+".java:生成成功");
             }
-            cfg.getTemplate("clazzMapper.ftl").process(data, new FileWriter(file));
-            System.out.println(modelNameUpperCamel + "mapper.java 生成成功");
         } catch (Exception e) {
             throw new RuntimeException("生成dao失败", e);
         }
 
     }
     //生成service和serviceImpl
-    private static void genService(String tableName) {
+    private static void genService() {
         try {
+            List<Table> tables = collectionDB(JDBC_URL, JDBC_DRIVER, JDBC_USERNAME, JDBC_PASSWORD);
+            //组织模板需要的参数
             Configuration cfg = getConfiguration();
-            //模板所需要的参数
-            Map<String, Object> data = new HashMap<>();
-            data.put("date", DATE);
-            data.put("author", AUTHOR);
-            String modelNameUpperCamel = tableNameConvertUpperCamel(tableName);
-            data.put("modelNameUpperCamel", modelNameUpperCamel);
-            data.put("modelNameLowerCamel", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel));
-            data.put("basePackage", ProjectConstant.BASE_PACKAGE);
-            data.put("basePackageService", ProjectConstant.SERVICE_PACKAGE);
-            data.put("basePackageServiceImpl", ProjectConstant.SERVICE_IMPL_PACKAGE);
-            data.put("basePackageModel", ProjectConstant.MODEL_PACKAGE);
-            data.put("basePackageDao", ProjectConstant.MAPPER_PACKAGE);
-            //生成service接口
-            File file = new File(JAVA_PATH + PACKAGE_PATH_SERVICE + modelNameUpperCamel + "Service.java");
-            if (!file.getParentFile().exists()) {
-                file.getParentFile().mkdirs();
+            for (Table table : tables) {
+                HashMap<Object, Object> map = new HashMap<>();
+                map.put("basePackageModel",ProjectConstant.MODEL_PACKAGE);
+                String modelNameUpperCamel = tableNameConvertUpperCamel(table.getTableName());
+                map.put("modelNameUpperCamel",modelNameUpperCamel);
+                map.put("modelNameLowerCamel",CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel));
+                map.put("basePackageService", ProjectConstant.SERVICE_PACKAGE);
+                map.put("basePackageServiceImpl", ProjectConstant.SERVICE_IMPL_PACKAGE);
+                map.put("basePackageDao", ProjectConstant.MAPPER_PACKAGE);
+                map.put("date", DATE);
+                map.put("author", AUTHOR);
+                //生成service接口
+                File file = new File(       JAVA_PATH+PACKAGE_PATH_SERVICE + modelNameUpperCamel + "Service.java");
+                if(!file.getParentFile().exists()){
+                    file.getParentFile().mkdirs();
+                }
+                cfg.getTemplate("service.ftl").process(map,new FileWriter(file));
+                System.out.println(modelNameUpperCamel+".java:生成成功");
+                //生成serviceImpl实现类
+                File implFile = new File(       JAVA_PATH+PACKAGE_PATH_SERVICE_IMPL + modelNameUpperCamel + "ServiceImpl.java");
+                if(!file.getParentFile().exists()){
+                    file.getParentFile().mkdirs();
+                }
+                cfg.getTemplate("serviceImpl.ftl").process(map,new FileWriter(implFile));
             }
-            cfg.getTemplate("service.ftl").process(data, new FileWriter(file));
-            System.out.println(modelNameUpperCamel + "Service.java 生成成功");
-            //生成serviceImpl实现类
-            File file1 = new File(JAVA_PATH + PACKAGE_PATH_SERVICE_IMPL + modelNameUpperCamel + "ServiceImpl.java");
-            if (!file1.getParentFile().exists()) {
-                file1.getParentFile().mkdirs();
-            }
-            cfg.getTemplate("serviceImpl.ftl").process(data, new FileWriter(file1));
-            System.out.println(modelNameUpperCamel + "ServiceImpl.java 生成成功");
+
+
+
         } catch (Exception e) {
             throw new RuntimeException("生成Service失败", e);
         }
