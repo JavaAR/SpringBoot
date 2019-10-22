@@ -26,7 +26,8 @@ public class CodeGeneratorUtil {
     //模板位置
     private final static String TEMPLATE_FILE_PATH="src/main/resources/templates";
     private static final String JAVA_PATH = "src/main/java"; // java文件路径
-    private static final String RESOURCES_PATH = "src/main/resources/mapper/";// 资源文件路径
+    //生成Mapper.xml文件的位置
+    private static final String RESOURCES_PATH = "src/main/resources/mapper/";
     //生成实体类的位置
     private static final String PACKAGE_PATH_POJO = packageConvertPath(FreeMakerPathConstant.MODEL_PACKAGE);
     //生成dao接口的文件位置

@@ -39,6 +39,12 @@ public class GlobalExceptionConfiguration {
        return DtoUtils.returnFail(format1+"->请求的接口:"+requestURI+"不存在", ProjectConstants.ErrorCode.UNKNOW);
    }
 
+   @ExceptionHandler(NullPointerException.class)
+   public Dto doNullPointerException(NullPointerException e){
+       //返回结果统一格式化(参数：异常错误码,异常对象)
+       return exceptionResultFormat(ProjectConstants.ErrorCode.SERVICEEXCEPTIONCODE,e);
+   }
+
     /**
      * 自定义异常
      * @param sex
