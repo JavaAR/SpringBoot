@@ -130,8 +130,8 @@ public class CodeGeneratorUtil {
                 System.out.println(modelNameUpperCamel+".java:生成成功");
                 //生成serviceImpl实现类
                 File implFile = new File(       JAVA_PATH+PACKAGE_PATH_SERVICE_IMPL + modelNameUpperCamel + "ServiceImpl.java");
-                if(!file.getParentFile().exists()){
-                    file.getParentFile().mkdirs();
+                if(!implFile.getParentFile().exists()){
+                    implFile.getParentFile().mkdirs();
                 }
                 cfg.getTemplate("serviceImpl.ftl").process(map,new FileWriter(implFile));
             }
