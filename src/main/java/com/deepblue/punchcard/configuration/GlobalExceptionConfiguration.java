@@ -1,9 +1,9 @@
 package com.deepblue.punchcard.configuration;
 
+import com.deepblue.punchcard.constant.ProjectConstants;
 import com.deepblue.punchcard.customException.ServiceException;
 import com.deepblue.punchcard.dto.Dto;
 import com.deepblue.punchcard.dto.DtoUtils;
-import com.deepblue.punchcard.constant.ErrorCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -36,7 +36,7 @@ public class GlobalExceptionConfiguration {
        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd:hh:mm:ss");
        String format1 = format.format(date);
        logger.error(ex.getMessage());
-       return DtoUtils.returnFail(format1+"->请求的接口:"+requestURI+"不存在",ErrorCode.NOHANDLERFOUND);
+       return DtoUtils.returnFail(format1+"->请求的接口:"+requestURI+"不存在", ProjectConstants.ErrorCode.UNKNOW);
    }
 
     /**
@@ -46,7 +46,7 @@ public class GlobalExceptionConfiguration {
      */
    @ExceptionHandler(ServiceException.class)
    public Dto customException(ServiceException sex){
-     return exceptionResultFormat(ErrorCode.SERVICEEXCEPTIONCODE,sex);
+     return exceptionResultFormat(ProjectConstants.ErrorCode.SERVICEEXCEPTIONCODE,sex);
    }
 
 
@@ -57,7 +57,7 @@ public class GlobalExceptionConfiguration {
      */
    @ExceptionHandler(Exception.class)
    public Dto otherException(Exception e){
-       return exceptionResultFormat(ErrorCode.UNKNOW,e);
+       return exceptionResultFormat(ProjectConstants.ErrorCode.UNKNOW,e);
    }
     /**
      * 异常信息统一返回

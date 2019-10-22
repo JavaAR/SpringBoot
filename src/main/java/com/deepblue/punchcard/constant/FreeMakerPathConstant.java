@@ -3,7 +3,7 @@ package com.deepblue.punchcard.constant;
 /**
  * 项目常量层（用于freemaker生成代码）
  */
-public class ProjectConstant {
+public class FreeMakerPathConstant {
 
     // 项目基础包名称
     public static final String BASE_PACKAGE = "com.deepblue.punchcard";

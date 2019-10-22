@@ -1,6 +1,6 @@
 package com.deepblue.punchcard.utils.tempUtils;
 
-import com.deepblue.punchcard.constant.ProjectConstant;
+import com.deepblue.punchcard.constant.FreeMakerPathConstant;
 import com.google.common.base.CaseFormat;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
@@ -28,13 +28,13 @@ public class CodeGeneratorUtil {
     private static final String JAVA_PATH = "src/main/java"; // java文件路径
     private static final String RESOURCES_PATH = "src/main/resources/mapper/";// 资源文件路径
     //生成实体类的位置
-    private static final String PACKAGE_PATH_POJO = packageConvertPath(ProjectConstant.MODEL_PACKAGE);
+    private static final String PACKAGE_PATH_POJO = packageConvertPath(FreeMakerPathConstant.MODEL_PACKAGE);
     //生成dao接口的文件位置
-    private static final String PACKAGE_PATH_DAO = packageConvertPath(ProjectConstant.MAPPER_PACKAGE);
+    private static final String PACKAGE_PATH_DAO = packageConvertPath(FreeMakerPathConstant.MAPPER_PACKAGE);
     //生成Service接口的位置
-    private static final String PACKAGE_PATH_SERVICE = packageConvertPath(ProjectConstant.SERVICE_PACKAGE);
+    private static final String PACKAGE_PATH_SERVICE = packageConvertPath(FreeMakerPathConstant.SERVICE_PACKAGE);
     //生成ServiceImpl的位置
-    private static final String PACKAGE_PATH_SERVICE_IMPL = packageConvertPath(ProjectConstant.SERVICE_IMPL_PACKAGE);
+    private static final String PACKAGE_PATH_SERVICE_IMPL = packageConvertPath(FreeMakerPathConstant.SERVICE_IMPL_PACKAGE);
     // @author
     private static final String AUTHOR = "向一";
     // @date
@@ -42,7 +42,6 @@ public class CodeGeneratorUtil {
 
 
     public static void main(String[] args) {
-       //genCode("system_log");//生成dao接口
         genModel();
         genMapper();
         genDao();
@@ -58,10 +57,10 @@ public class CodeGeneratorUtil {
             Configuration cfg = getConfiguration();
             for (Table table : tables) {
                 HashMap<Object, Object> Map = new HashMap<>();
-                Map.put("basePackageModel",ProjectConstant.MODEL_PACKAGE);
+                Map.put("basePackageModel", FreeMakerPathConstant.MODEL_PACKAGE);
                 String modelNameUpperCamel = tableNameConvertUpperCamel(table.getTableName());
                 Map.put("modelNameUpperCamel",modelNameUpperCamel);
-                Map.put("basePackageDao", ProjectConstant.MAPPER_PACKAGE);
+                Map.put("basePackageDao", FreeMakerPathConstant.MAPPER_PACKAGE);
                 Map.put("table",table);
                 Map.put("date", DATE);
                 Map.put("author", AUTHOR);
@@ -84,11 +83,11 @@ public class CodeGeneratorUtil {
             Configuration cfg = getConfiguration();
             for (Table table : tables) {
                 HashMap<Object, Object> map = new HashMap<>();
-                map.put("basePackageModel",ProjectConstant.MODEL_PACKAGE);
+                map.put("basePackageModel", FreeMakerPathConstant.MODEL_PACKAGE);
                 String modelNameUpperCamel = tableNameConvertUpperCamel(table.getTableName());
                 map.put("modelNameUpperCamel",modelNameUpperCamel);
                 map.put("modelNameLowerCamel",CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel));
-                map.put("basePackageDao", ProjectConstant.MAPPER_PACKAGE);
+                map.put("basePackageDao", FreeMakerPathConstant.MAPPER_PACKAGE);
                 map.put("table",table);
                 map.put("date", DATE);
                 map.put("author", AUTHOR);
@@ -112,13 +111,13 @@ public class CodeGeneratorUtil {
             Configuration cfg = getConfiguration();
             for (Table table : tables) {
                 HashMap<Object, Object> map = new HashMap<>();
-                map.put("basePackageModel",ProjectConstant.MODEL_PACKAGE);
+                map.put("basePackageModel", FreeMakerPathConstant.MODEL_PACKAGE);
                 String modelNameUpperCamel = tableNameConvertUpperCamel(table.getTableName());
                 map.put("modelNameUpperCamel",modelNameUpperCamel);
                 map.put("modelNameLowerCamel",CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel));
-                map.put("basePackageService", ProjectConstant.SERVICE_PACKAGE);
-                map.put("basePackageServiceImpl", ProjectConstant.SERVICE_IMPL_PACKAGE);
-                map.put("basePackageDao", ProjectConstant.MAPPER_PACKAGE);
+                map.put("basePackageService", FreeMakerPathConstant.SERVICE_PACKAGE);
+                map.put("basePackageServiceImpl", FreeMakerPathConstant.SERVICE_IMPL_PACKAGE);
+                map.put("basePackageDao", FreeMakerPathConstant.MAPPER_PACKAGE);
                 map.put("date", DATE);
                 map.put("author", AUTHOR);
                 //生成service接口
@@ -135,9 +134,6 @@ public class CodeGeneratorUtil {
                 }
                 cfg.getTemplate("serviceImpl.ftl").process(map,new FileWriter(implFile));
             }
-
-
-
         } catch (Exception e) {
             throw new RuntimeException("生成Service失败", e);
         }
@@ -152,7 +148,7 @@ public class CodeGeneratorUtil {
             Configuration cfg = getConfiguration();
             for (Table table : tables) {
                 HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
-                objectObjectHashMap.put("basePackageModel",ProjectConstant.MODEL_PACKAGE);
+                objectObjectHashMap.put("basePackageModel", FreeMakerPathConstant.MODEL_PACKAGE);
                 String modelNameUpperCamel = tableNameConvertUpperCamel(table.getTableName());
                 objectObjectHashMap.put("modelNameUpperCamel",modelNameUpperCamel);
                 objectObjectHashMap.put("table",table);
