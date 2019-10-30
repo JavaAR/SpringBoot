@@ -42,8 +42,8 @@ public class RedisApi {
     }
 
     /**
+     * 设置key value 并且设置有效期
      *
-     *设置key value 并且设置有效期
      * @param key
      * @param seconds 有效期
      * @param value
@@ -76,6 +76,7 @@ public class RedisApi {
 
     /**
      * 根据key获取value
+     *
      * @param key
      * @return
      */
@@ -89,6 +90,7 @@ public class RedisApi {
 
     /**
      * 根据key删除value
+     *
      * @param key
      */
     public void delete(String key) {
@@ -103,7 +105,8 @@ public class RedisApi {
     }
 
     /**
-     *设置key并且加所
+     * 设置key并且加所
+     *
      * @param key
      * @param value
      * @return
@@ -133,6 +136,7 @@ public class RedisApi {
 
     /**
      * 设置key的过期时间
+     *
      * @param key
      * @param expireTime
      * @return
@@ -159,6 +163,7 @@ public class RedisApi {
 
     /**
      * 给key加锁
+     *
      * @param key
      * @return
      */
@@ -185,6 +190,7 @@ public class RedisApi {
 
     /**
      * 解锁
+     *
      * @param key
      */
     public void unlock(String key) {
@@ -204,9 +210,6 @@ public class RedisApi {
     public boolean validate(String token) {
         return exist(token);
     }
-
-
-
 
 
 }

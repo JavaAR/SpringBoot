@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 自定义异常
  */
-public class ServiceException extends  RuntimeException implements Serializable {
+public class ServiceException extends RuntimeException implements Serializable {
 
     public ServiceException() {
     }

@@ -19,7 +19,7 @@ public class TypeConstant {
         typeMap.put("DATETIME", "Date");
         typeMap.put("DECIMAL", "Double");
         typeMap.put("DATE", "Date");
-        typeMap.put("TINYINT","Boolean");
+        typeMap.put("TINYINT", "Boolean");
     }
 
     public static void addType(String columnType, String javaType) {

@@ -1,8 +1,10 @@
 spring:
-#Swagger注入
+  thymeleaf:
+    prefix: classpath:/templates/
+  #Swagger注入
   swagger:
     swaggerScanLocations: com.deepblue.punchcard.controller
-#Druid监控注入
+  #Druid监控注入
   druid:
     allowIp: 192.168.3.51,127.0.0.1
     denyIp: 192.168.3.100
@@ -10,15 +12,15 @@ spring:
     loginPassword: 123456
     resetEnable: false
     exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
-#静态资源放行注入,全局拦截器规则注入,放行规则注入
+  #静态资源放行注入,全局拦截器规则注入,放行规则注入
   request:
     url: /static/**
     path: classpath:/static/
     interceptUrl: /api/**
     excludeInterceptUrls:
-     /api/userLogin,
-     /api/userLoginOut
-#Druid 数据池配置注入
+      /api/login,
+      /api/logout
+  #Druid 数据池配置注入
   datasource:
     url: jdbc:mysql://localhost:0710/test?useUnicode=true&characterEncoding=utf-8
     username: root
@@ -48,12 +50,12 @@ spring:
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
     #合并多个DruidDataSource
     useGlobalDataSourceStat: true
-#如果访问路径不存在 则抛出异常(关闭SpringBoot自带的404处理)
+  #如果访问路径不存在 则抛出异常(关闭SpringBoot自带的404处理)
   mvc:
     throw-exception-if-no-handler-found: true
   resources:
     add-mappings: false
-#redis配置
+  #redis配置
   redis:
     host: 127.0.0.1
     port: 6379

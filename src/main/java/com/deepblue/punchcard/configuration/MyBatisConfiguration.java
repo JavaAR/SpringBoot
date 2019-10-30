@@ -23,6 +23,7 @@ public class MyBatisConfiguration {
     /**
      * 相当于在yml文件中配置mybatis.mapper-locations:classpath: /mapper/*mapper.xml
      * 配置SqlSessionFactoryBean和配置mapper扫描技术
+     *
      * @param dataSource
      * @return
      * @throws Exception
@@ -39,13 +40,15 @@ public class MyBatisConfiguration {
         factory.setMapperLocations(resolver.getResources("classpath:/mapper/*.xml"));
         return factory.getObject();
     }
+
     /**
      * 相当于在主类中配置@MapperScan（"com.deepblue.punchcard.dao"）
      * 配置dao接口的位置
+     *
      * @return
      */
     @Bean
-    public MapperScannerConfigurer mapperScanner(){
+    public MapperScannerConfigurer mapperScanner() {
         MapperScannerConfigurer mapperScanner = new MapperScannerConfigurer();
         mapperScanner.setSqlSessionFactoryBeanName("sqlSessionFactoryBean");
         mapperScanner.setBasePackage("com.deepblue.punchcard.dao");

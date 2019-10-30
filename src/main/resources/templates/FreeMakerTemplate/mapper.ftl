@@ -40,7 +40,6 @@
                 </#if>
             </#list>
         </trim>
-         order by creationDate desc
         <if test="beginPos != null and beginPos!='' and pageSize != null  and pageSize !='' ">
             limit ${r"#{"}beginPos},${r"#{"}pageSize}
         </if>

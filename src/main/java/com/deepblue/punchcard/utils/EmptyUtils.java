@@ -5,11 +5,12 @@ import java.util.Map;
 
 /**
  * <p>判断是否是空的 工具类</p>
+ *
  * @author 向一
  */
 public class EmptyUtils {
     //判空
-    public static boolean isEmpty(Object obj){
+    public static boolean isEmpty(Object obj) {
         if (obj == null)
             return true;
         if (obj instanceof CharSequence)
@@ -34,15 +35,15 @@ public class EmptyUtils {
         }
         return false;
     }
-    public static boolean isNotEmpty(Object obj){
+
+    public static boolean isNotEmpty(Object obj) {
         return !isEmpty(obj);
     }
 
 
-
-    private boolean validPropertyEmpty(Object ...args) {
+    private boolean validPropertyEmpty(Object... args) {
         for (int i = 0; i < args.length; i++) {
-            if(EmptyUtils.isEmpty(args[i])){
+            if (EmptyUtils.isEmpty(args[i])) {
                 return true;
             }
         }

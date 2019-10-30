@@ -19,7 +19,6 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 
 /**
- *
  * 数据池Druid配置类
  * 1.配置Druid数据源
  * 2.配置监控
@@ -48,35 +47,37 @@ public class DruidConfiguration {
     /**
      * 配置监控StatViewServlet配置
      * 提供监控信息展示的html
+     *
      * @return
      */
     @Bean
-    public ServletRegistrationBean druidServlet(){
+    public ServletRegistrationBean druidServlet() {
         ServletRegistrationBean registrationBean = new ServletRegistrationBean(new StatViewServlet(), "/druid/*");
         //设置访问控制(allow)
-        registrationBean.addInitParameter("allow",allowIp);
+        registrationBean.addInitParameter("allow", allowIp);
         //配置访问权限（deny）
-        registrationBean.addInitParameter("deny",denyIp);
+        registrationBean.addInitParameter("deny", denyIp);
         //配置页面访问用户名和密码
-        registrationBean.addInitParameter("loginUsername",druidUserName);
-        registrationBean.addInitParameter("loginPassword",druidPassword);
+        registrationBean.addInitParameter("loginUsername", druidUserName);
+        registrationBean.addInitParameter("loginPassword", druidPassword);
         //设置不允许清空数据
-        registrationBean.addInitParameter("resetEnable",resetData);
+        registrationBean.addInitParameter("resetEnable", resetData);
         return registrationBean;
     }
 
     /**
      * 配置WebStatFilter
      * 用于采集jdbc关联的监控数据
+     *
      * @return
      */
     @Bean
-    public FilterRegistrationBean webStatFilter(){
+    public FilterRegistrationBean webStatFilter() {
         FilterRegistrationBean bean = new FilterRegistrationBean(new WebStatFilter());
         //配置过滤规则
         bean.addUrlPatterns("/*");
         //过滤一些不必要的url 如 *.js//jslib/*
-        bean.addInitParameter("exclusions",exclusions);
+        bean.addInitParameter("exclusions", exclusions);
         return bean;
     }
 
@@ -84,9 +85,9 @@ public class DruidConfiguration {
      * Druid 配置数据源
      */
     @Component
-    @ConfigurationProperties(prefix =DB_PREFIX )
+    @ConfigurationProperties(prefix = DB_PREFIX)
     @Data
-    class DataSourceProertice{
+    class DataSourceProertice {
         private String url;
         private String username;
         private String password;
@@ -110,7 +111,7 @@ public class DruidConfiguration {
 
         @Bean
         @Primary //同样数据源下首先使用该注解下的DataSource
-        public DataSource dataSource(){
+        public DataSource dataSource() {
 
             DruidDataSource dataSource = new DruidDataSource();
             dataSource.setUrl(url);
@@ -132,7 +133,7 @@ public class DruidConfiguration {
             try {
                 dataSource.setFilters(filters);
             } catch (SQLException e) {
-               logger.error("druid configuration initialization filter",e);
+                logger.error("druid configuration initialization filter", e);
             }
             dataSource.setConnectionProperties(connectionProperties);
             dataSource.setUseGlobalDataSourceStat(useGlobalDataSourceStat);

@@ -19,12 +19,12 @@ import java.util.Date;
 public class CodeGeneratorUtil {
 
     //jdbc配置
-    private final static String JDBC_URL="jdbc:mysql://localhost:0710/itripdb";
-    private final static String JDBC_USERNAME ="root";
-    private final static String JDBC_PASSWORD ="123456";
-    private final static String JDBC_DRIVER ="com.mysql.jdbc.Driver";
+    private final static String JDBC_URL = "jdbc:mysql://localhost:0710/test";
+    private final static String JDBC_USERNAME = "root";
+    private final static String JDBC_PASSWORD = "123456";
+    private final static String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     //模板位置
-    private final static String TEMPLATE_FILE_PATH="src/main/resources/templates";
+    private final static String TEMPLATE_FILE_PATH = "src/main/resources/templates/FreeMakerTemplate/";
     private static final String JAVA_PATH = "src/main/java"; // java文件路径
     //生成Mapper.xml文件的位置
     private static final String RESOURCES_PATH = "src/main/resources/mapper/";
@@ -50,7 +50,7 @@ public class CodeGeneratorUtil {
     }
 
     //生成mapper.xml文件
-    private static void genMapper(){
+    private static void genMapper() {
         try {
             //获取表信息以及字段信息
             List<Table> tables = collectionDB(JDBC_URL, JDBC_DRIVER, JDBC_USERNAME, JDBC_PASSWORD);
@@ -60,22 +60,23 @@ public class CodeGeneratorUtil {
                 HashMap<Object, Object> Map = new HashMap<>();
                 Map.put("basePackageModel", FreeMakerPathConstant.MODEL_PACKAGE);
                 String modelNameUpperCamel = tableNameConvertUpperCamel(table.getTableName());
-                Map.put("modelNameUpperCamel",modelNameUpperCamel);
+                Map.put("modelNameUpperCamel", modelNameUpperCamel);
                 Map.put("basePackageDao", FreeMakerPathConstant.MAPPER_PACKAGE);
-                Map.put("table",table);
+                Map.put("table", table);
                 Map.put("date", DATE);
                 Map.put("author", AUTHOR);
-                File file = new File(  RESOURCES_PATH + modelNameUpperCamel + "Mapper.xml");
-                if(!file.getParentFile().exists()){
+                File file = new File(RESOURCES_PATH + modelNameUpperCamel + "Mapper.xml");
+                if (!file.getParentFile().exists()) {
                     file.getParentFile().mkdirs();
                 }
-                cfg.getTemplate("mapper.ftl").process(Map,new FileWriter(file));
-                System.out.println(modelNameUpperCamel+".xml:生成成功");
+                cfg.getTemplate("mapper.ftl").process(Map, new FileWriter(file));
+                System.out.println(modelNameUpperCamel + ".xml:生成成功");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     //生成dao接口
     private static void genDao() {
         try {
@@ -86,24 +87,25 @@ public class CodeGeneratorUtil {
                 HashMap<Object, Object> map = new HashMap<>();
                 map.put("basePackageModel", FreeMakerPathConstant.MODEL_PACKAGE);
                 String modelNameUpperCamel = tableNameConvertUpperCamel(table.getTableName());
-                map.put("modelNameUpperCamel",modelNameUpperCamel);
-                map.put("modelNameLowerCamel",CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel));
+                map.put("modelNameUpperCamel", modelNameUpperCamel);
+                map.put("modelNameLowerCamel", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel));
                 map.put("basePackageDao", FreeMakerPathConstant.MAPPER_PACKAGE);
-                map.put("table",table);
+                map.put("table", table);
                 map.put("date", DATE);
                 map.put("author", AUTHOR);
-                File file = new File(       JAVA_PATH+ PACKAGE_PATH_DAO+ modelNameUpperCamel + "Mapper.java");
-                if(!file.getParentFile().exists()){
+                File file = new File(JAVA_PATH + PACKAGE_PATH_DAO + modelNameUpperCamel + "Mapper.java");
+                if (!file.getParentFile().exists()) {
                     file.getParentFile().mkdirs();
                 }
-                cfg.getTemplate("clazzMapper.ftl").process(map,new FileWriter(file));
-                System.out.println(modelNameUpperCamel+".java:生成成功");
+                cfg.getTemplate("clazzMapper.ftl").process(map, new FileWriter(file));
+                System.out.println(modelNameUpperCamel + ".java:生成成功");
             }
         } catch (Exception e) {
             throw new RuntimeException("生成dao失败", e);
         }
 
     }
+
     //生成service和serviceImpl
     private static void genService() {
         try {
@@ -114,26 +116,26 @@ public class CodeGeneratorUtil {
                 HashMap<Object, Object> map = new HashMap<>();
                 map.put("basePackageModel", FreeMakerPathConstant.MODEL_PACKAGE);
                 String modelNameUpperCamel = tableNameConvertUpperCamel(table.getTableName());
-                map.put("modelNameUpperCamel",modelNameUpperCamel);
-                map.put("modelNameLowerCamel",CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel));
+                map.put("modelNameUpperCamel", modelNameUpperCamel);
+                map.put("modelNameLowerCamel", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel));
                 map.put("basePackageService", FreeMakerPathConstant.SERVICE_PACKAGE);
                 map.put("basePackageServiceImpl", FreeMakerPathConstant.SERVICE_IMPL_PACKAGE);
                 map.put("basePackageDao", FreeMakerPathConstant.MAPPER_PACKAGE);
                 map.put("date", DATE);
                 map.put("author", AUTHOR);
                 //生成service接口
-                File file = new File(       JAVA_PATH+PACKAGE_PATH_SERVICE + modelNameUpperCamel + "Service.java");
-                if(!file.getParentFile().exists()){
+                File file = new File(JAVA_PATH + PACKAGE_PATH_SERVICE + modelNameUpperCamel + "Service.java");
+                if (!file.getParentFile().exists()) {
                     file.getParentFile().mkdirs();
                 }
-                cfg.getTemplate("service.ftl").process(map,new FileWriter(file));
-                System.out.println(modelNameUpperCamel+".java:生成成功");
+                cfg.getTemplate("service.ftl").process(map, new FileWriter(file));
+                System.out.println(modelNameUpperCamel + ".java:生成成功");
                 //生成serviceImpl实现类
-                File implFile = new File(       JAVA_PATH+PACKAGE_PATH_SERVICE_IMPL + modelNameUpperCamel + "ServiceImpl.java");
-                if(!implFile.getParentFile().exists()){
+                File implFile = new File(JAVA_PATH + PACKAGE_PATH_SERVICE_IMPL + modelNameUpperCamel + "ServiceImpl.java");
+                if (!implFile.getParentFile().exists()) {
                     implFile.getParentFile().mkdirs();
                 }
-                cfg.getTemplate("serviceImpl.ftl").process(map,new FileWriter(implFile));
+                cfg.getTemplate("serviceImpl.ftl").process(map, new FileWriter(implFile));
             }
         } catch (Exception e) {
             throw new RuntimeException("生成Service失败", e);
@@ -151,17 +153,17 @@ public class CodeGeneratorUtil {
                 HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
                 objectObjectHashMap.put("basePackageModel", FreeMakerPathConstant.MODEL_PACKAGE);
                 String modelNameUpperCamel = tableNameConvertUpperCamel(table.getTableName());
-                objectObjectHashMap.put("modelNameUpperCamel",modelNameUpperCamel);
-                objectObjectHashMap.put("table",table);
+                objectObjectHashMap.put("modelNameUpperCamel", modelNameUpperCamel);
+                objectObjectHashMap.put("table", table);
                 objectObjectHashMap.put("date", DATE);
                 objectObjectHashMap.put("author", AUTHOR);
 
                 File file = new File(JAVA_PATH + PACKAGE_PATH_POJO + modelNameUpperCamel + ".java");
-                if(!file.getParentFile().exists()){
+                if (!file.getParentFile().exists()) {
                     file.getParentFile().mkdirs();
                 }
-                cfg.getTemplate("model.ftl").process(objectObjectHashMap,new FileWriter(file));
-                System.out.println(modelNameUpperCamel+".java:生成成功");
+                cfg.getTemplate("model.ftl").process(objectObjectHashMap, new FileWriter(file));
+                System.out.println(modelNameUpperCamel + ".java:生成成功");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -169,7 +171,7 @@ public class CodeGeneratorUtil {
     }
 
     //连接数据库 返回表和字段信息
-    private static List<Table> collectionDB(String url,String driver,String username,String password) {
+    private static List<Table> collectionDB(String url, String driver, String username, String password) {
         DatabaseMetaData dmd = null;
         Connection conn = null;
         List<Table> tables = new ArrayList<Table>();
@@ -178,7 +180,7 @@ public class CodeGeneratorUtil {
             conn = DriverManager.getConnection(url, username, password);
             dmd = conn.getMetaData();
             ResultSet resultSet = dmd.getTables(null, null, null, new String[]{"TABLE"});
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 Table table = new Table();
                 table.setCloumns(new ArrayList<Cloumn>());
                 //获取表名
@@ -189,14 +191,14 @@ public class CodeGeneratorUtil {
                 table.setComment(comment);
                 //根据表名获取字段信息
                 ResultSet tableColumns = dmd.getColumns(null, "%", tableName, "%");
-                    //根据表明获取字段信息
-                    while (tableColumns.next()){
-                        Cloumn cloumn = new Cloumn();
-                        cloumn.setCloumnName(tableColumns.getString("COLUMN_NAME"));
-                        cloumn.setComment(tableColumns.getString("REMARKS"));
-                        cloumn.setCloumnType(tableColumns.getString("TYPE_NAME"));
-                        table.getCloumns().add(cloumn);
-                    }
+                //根据表明获取字段信息
+                while (tableColumns.next()) {
+                    Cloumn cloumn = new Cloumn();
+                    cloumn.setCloumnName(tableColumns.getString("COLUMN_NAME"));
+                    cloumn.setComment(tableColumns.getString("REMARKS"));
+                    cloumn.setCloumnType(tableColumns.getString("TYPE_NAME"));
+                    table.getCloumns().add(cloumn);
+                }
                 tables.add(table);
             }
 
@@ -226,10 +228,12 @@ public class CodeGeneratorUtil {
         conn.close();
         return comment;
     }
+
     //去掉下划线驼峰命名
     private static String tableNameConvertUpperCamel(String tableName) {
         return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableName.toLowerCase());
     }
+
     //格式化表的注释信息
     private static String parse(String all) {
         String comment = null;
@@ -241,6 +245,7 @@ public class CodeGeneratorUtil {
         comment = comment.substring(0, comment.length() - 1);
         return comment;
     }
+
     //freemaker 配置bean
     private static Configuration getConfiguration() throws IOException {
         Configuration cfg = new Configuration(Configuration.VERSION_2_3_23);

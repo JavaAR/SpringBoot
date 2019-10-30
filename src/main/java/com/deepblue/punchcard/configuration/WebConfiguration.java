@@ -1,6 +1,8 @@
 package com.deepblue.punchcard.configuration;
 
+import com.deepblue.punchcard.entity.SysUser;
 import lombok.Data;
+import org.apache.shiro.SecurityUtils;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,9 +66,7 @@ public class WebConfiguration implements WebMvcConfigurer {
         private org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CustomInterceptors.class);
         @Override
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-            logger.info(request.getRequestURI());
-            //自定义拦截规则规则
-            System.out.println("我被拦截了");
+            logger.info("请求的接口为"+request.getRequestURI());
             return true;
         }
     }

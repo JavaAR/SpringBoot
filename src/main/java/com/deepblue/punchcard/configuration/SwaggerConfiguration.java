@@ -24,7 +24,7 @@ public class SwaggerConfiguration {
     private String swaggerScanLocations;
 
     @Bean
-    public Docket createRestApi(){
+    public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
@@ -36,7 +36,7 @@ public class SwaggerConfiguration {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Swagger集成SpringBoot 接口测试文档")
-                .contact(new Contact("向一","http://docs.swagger.io/swagger-core/apidocs/index.html",null))
+                .contact(new Contact("向一", "http://docs.swagger.io/swagger-core/apidocs/index.html", null))
                 .version("1.0")
                 .build();
     }

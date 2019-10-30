@@ -7,14 +7,25 @@ public class ProjectConstants {
     /**
      * 错误码
      */
-    public static class ErrorCode{
+    public static class ErrorCode {
         //系统异常错误码
-        public final static String UNKNOW ="20000";
-         //404异常错误码
-        public final static String NOHANDLERFOUND ="20404";
+        public final static String UNKNOW = "20000";
+        //404异常错误码
+        public final static String NOHANDLERFOUND = "20404";
         //自定义异常类错误码
-        public final static String SERVICEEXCEPTIONCODE ="20001";
+        public final static String SERVICEEXCEPTIONCODE = "20001";
+        //shiro认证用户名为空异常
+        public final static String SHIRO_AUTH_USERNAMEISNULL = "20002";
+        //Shiro认证密码错误异常
+        public final static String SHIRO_AUTH_PASSWORDISMISS = "20003";
+        //Shiro 用户未登录错误码
+        public final static String SHIRO_AUTH_USERNOLOGIN = "20004";
+        //shiro 用户授权没有权限
+        public final static String SHIRO_PREM_NOT_PREM = "20403";
+        //请求参数不能为空
+        public final static String PARAMETER_IS_NOT_NULL = "20005";
         //添加其他
+
 
     }
 
@@ -28,10 +39,8 @@ public class ProjectConstants {
 
     }
     /**
-     * 添加其他常量
+     * 添加其他内部类常量
      */
-
-
 
 
 }
