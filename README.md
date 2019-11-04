@@ -12,7 +12,7 @@
 >，以及其他Druid配置，作者都给有注释
 > * ### Druid 配置监控StatViewServlet 
 > 配置监控StatViewServlet 主要用于配置一些访问可视化页面的ip，用户名，密码，以及是否清除数据，
-> > ###### 配置白名单 
+> > ##### 配置白名单 
 > > 使用者可以在  **application-dev.yml**  文件中的  **spring.druid.allowIp**  节点下配置访问可视化页面的白名单ip，例如：配置  **spring.druid.allowIp**  节点的值为  **127.0.0.1**  ，那么访问页面时就只有
 > >  **127.0.0.1：你的端口/druid**  可以访问到登录页面，  **spring.druid.allowIp**  的值可以有多个，用,分开。
 > > ##### 配置黑名单
@@ -60,14 +60,31 @@
 6. 静态资源放行
 > 如果使用者的项目为前后端分离项目，可忽略此条  
 > 静态资源放行主要用于一些后缀名为.js,.html,.css,.jpg,等资源放行，使用者可以在  **application-dev.yml**  文件中的  **spring.request.url**  配置请求的url路径放行，在  **spring.request.path**  节点配置请求的静态资源文件夹放行
-6. Swagger接口在线文档
+7. Swagger接口在线文档
 > 本项目引入了Swagger2接口文档生成，Swagger的配置类在  **src\main\java\com\deepblue\punchcard\configuration\SwaggerConfiguration.java**  类中，使用者可以在  **application-dev.yml**  文件中的  **spring.swagger.swaggerScanLocations**  节点修改Swagger要扫描的包，具体Swagger注解请使用者自行百度，这里不再概述,
 配置好的用户可直接访问[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-7. freemaker代码生成器
+8. freemaker代码生成器
 > 代码生成器的工具类在  **\src\main\java\com\deepblue\punchcard\utils\tempUtils\CodeGeneratorUtil.java**  类中，使用者需将该类中的  **jdbc**  配置修改为自己的数据库配置，模板的位置在  **src/main/resources/templates**  下，如果使用者想自定义模板，可以修改  **TEMPLATE_FILE_PATH**  属性的位置，
 > 修改完之后请在相应的方法中修改使用模板的名称,如果用户想自定义代码生成的位置，可以在  **src\main\java\com\deepblue\punchcard\constant\FreeMakerPathConstant.java**  类中自行修改
 > 数据库类型转换为java类型可以在  **\src\main\java\com\deepblue\punchcard\utils\tempUtils\TypeConstant.java**  类中的静态代码块中自行修改
-8. Redis数据库配置
+9. Redis数据库配置
 > 本项目Redis使用主要存储用户信息，使用者可以在  **application-dev.yml**  文件中的  **spring.redis**  配置自己的redis连接，另外作者在  **\src\main\java\com\deepblue\punchcard\utils\RedisApi.java**  工具类中添加了redis的存取方法，使用者可自己参考
+10. Shiro实现接口权限保护功能
+> 为了方便用户的权限与角色管理，作者引入了shiro框架，集成shiro的主要有两个，分别是：shiro配置类  **\src\main\java\com\deepblue\punchcard\configuration\shiroConfiguration\ShiroConfiguration.java**  Shiro自定义的Realm类:  **\src\main\java\com\deepblue\punchcard\configuration\shiroConfiguration\CustomRealm.java**  
+> * ### Shiro配置类
+> > #### 拦截器配置
+> > shiro配置类中的shiroFilterFactoryBean方法中配置了运行的SecurityManager与拦截的规则与权限管理，由于手动维护太麻烦，所以作者将拦截规则与所需权限放入了数据库中，方便管理(由于配置好shiro之后会与druid与swagger冲突，所以只配置了要拦截的请求与相应的权限)
+> > #### SecurityManager配置
+> > SecurityManager是Shiro的心脏，所有的认证与授权，密码加密，等等都是在这里进行，shiro配置类中的securityManager方法中配置了当前安全管理与自定义的realm，因为无论是认证还是授权最终所调用的都是Realm，所以用自定义的realm
+> > #### 自定义的Realm配置:
+> > 注册自己定义的Realm类
+> > #### 加密配置(hashedCredentialsMatcher)
+> > 自定义的加密算法与加密次数
+> * ### 自定义的Realm配置类
+> > #### 认证（doGetAuthenticationInfo）
+> > shiro认证流程：doGetAuthorizationInfo (认证) 获取用户名之后，从数据库中查找用户信息，如果未查出，则会抛出UnknownAccountException()未知账户异常，组织返回参数simpleAuthorizationInfo（object，password，realmName），设置盐
+> > （subject.login()方法调用之后，通过SecurityManager的Authenticator类会将用自定义的Realm与用户的token进行对比，根据用户名查找，如果查找到就返回给Authenticator用户信息，没有则返回null，Authenticator接受到返回的信息之后，如果为null，则抛出UnknownAccountException，如果不为null，则将返回的对象与用户的token密码进行对比，如果一致，则认证成功，如果不一致，则抛出IncorrectCredentialsException异常）
+> > s
+
 ##  后续添加的功能有  **shiro权限保护接口功能**  ，  **aop异步记录日志功能**  ，  **多文件上传功能**  ，  **系统发送邮件功能**  等
 ##  最后推荐郭阳大牛推荐给我的一款框架[ruoyi](http://doc.ruoyi.vip/)

@@ -25,8 +25,6 @@ public class ProjectConstants {
         //请求参数不能为空
         public final static String PARAMETER_IS_NOT_NULL = "20005";
         //添加其他
-
-
     }
 
     /**
@@ -38,9 +36,12 @@ public class ProjectConstants {
         //添加其他
 
     }
+
     /**
      * 添加其他内部类常量
      */
+
+
 
 
 }
