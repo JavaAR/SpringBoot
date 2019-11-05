@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepblue.punchcard.dao.SysPermMapper">
+
+    <select id="getSysPermById" resultType="com.deepblue.punchcard.entity.SysPerm" >
+        select
+                id as id,
+                perm_name as permName,
+                perm_desc as permDesc,
+                perm_value as permValue,
+                create_time as createTime,
+                update_time as updateTime,
+                is_disable as isDisable
+        from sys_perm
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="id != null">
+                and id=#{id}
+            </if>
+        </trim>
+    </select>
+
+    <select id="getSysPermListByMap" resultType="com.deepblue.punchcard.entity.SysPerm" parameterType="java.util.Map">
+        select
+                id as id,
+                perm_name as permName,
+                perm_desc as permDesc,
+                perm_value as permValue,
+                create_time as createTime,
+                update_time as updateTime,
+                is_disable as isDisable
+        from sys_perm
+        <trim prefix="where" prefixOverrides="and | or">
+                    <if test="id != null and id!=''">
+                        and id=#{id}
+                    </if>
+                    <if test="permName != null and permName!=''">
+                        and perm_name=#{permName}
+                    </if>
+                    <if test="permDesc != null and permDesc!=''">
+                        and perm_desc=#{permDesc}
+                    </if>
+                    <if test="permValue != null and permValue!=''">
+                        and perm_value=#{permValue}
+                    </if>
+                    <if test="createTime != null and createTime!=''">
+                        and create_time=#{createTime}
+                    </if>
+                    <if test="updateTime != null and updateTime!=''">
+                        and update_time=#{updateTime}
+                    </if>
+        </trim>
+        <if test="beginPos != null and beginPos!='' and pageSize != null  and pageSize !='' ">
+            limit #{beginPos},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getSysPermCountByMap" resultType="Integer"  parameterType="java.util.Map">
+        select count(*) from sys_perm
+        <trim prefix="where" prefixOverrides="and | or">
+                <if test="id != null and id!=''">
+                    and id=#{id}
+                </if>
+                <if test="permName != null and permName!=''">
+                    and perm_name=#{permName}
+                </if>
+                <if test="permDesc != null and permDesc!=''">
+                    and perm_desc=#{permDesc}
+                </if>
+                <if test="permValue != null and permValue!=''">
+                    and perm_value=#{permValue}
+                </if>
+                <if test="createTime != null and createTime!=''">
+                    and create_time=#{createTime}
+                </if>
+                <if test="updateTime != null and updateTime!=''">
+                    and update_time=#{updateTime}
+                </if>
+                <if test="isDisable != null and isDisable!=''">
+                    and is_disable=#{isDisable}
+                </if>
+        </trim>
+    </select>
+
+    <insert id="insertSysPerm" parameterType="com.deepblue.punchcard.entity.SysPerm">
+        insert into sys_perm(
+                        perm_name,
+                        perm_desc,
+                        perm_value,
+                        create_time,
+                        update_time,
+                        is_disable)
+        values(
+                     #{permName},
+                     #{permDesc},
+                     #{permValue},
+                     #{createTime},
+                     #{updateTime},
+                    #{isDisable})
+    </insert>
+
+    <update id="updateSysPerm" parameterType="com.deepblue.punchcard.entity.SysPerm">
+        update sys_perm
+        <trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
+                    <if test="id != null and id!=''">
+                        id=#{id},
+                    </if>
+                    <if test="permName != null and permName!=''">
+                        perm_name=#{permName},
+                    </if>
+                    <if test="permDesc != null and permDesc!=''">
+                        perm_desc=#{permDesc},
+                    </if>
+                    <if test="permValue != null and permValue!=''">
+                        perm_value=#{permValue},
+                    </if>
+                    <if test="createTime != null and createTime!=''">
+                        create_time=#{createTime},
+                    </if>
+                    <if test="updateTime != null and updateTime!=''">
+                        update_time=#{updateTime},
+                    </if>
+                    <if test="isDisable != null and isDisable!=''">
+                        is_disable=#{isDisable}
+                    </if>
+        </trim>
+    </update>
+
+    <delete id="deleteSysPermById" parameterType="Long">
+        delete from sys_perm where id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepblue.punchcard.dao.RolePermMapper">
+
+
+    <select id="getUserPermsByUserId" resultType="string" parameterType="int">
+  select distinct
+      p.perm_value
+  from
+      sys_perm p,
+      role_perm rp,
+      user_role ur
+  where
+      p.id = rp.perm_id
+      and ur.role_id = rp.role_id
+      and ur.user_id = #{id}
+      and p.is_disable = 0
+</select>
+
+
+    <select id="getRolePermById" resultType="com.deepblue.punchcard.entity.RolePerm" >
+        select
+                id as id,
+                perm_id as permId,
+                role_id as roleId
+        from role_perm
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="id != null">
+                and id=#{id}
+            </if>
+        </trim>
+    </select>
+
+    <select id="getRolePermListByMap" resultType="com.deepblue.punchcard.entity.RolePerm" parameterType="java.util.Map">
+        select
+                id as id,
+                perm_id as permId,
+                role_id as roleId
+        from role_perm
+        <trim prefix="where" prefixOverrides="and | or">
+                    <if test="id != null and id!=''">
+                        and id=#{id}
+                    </if>
+                    <if test="permId != null and permId!=''">
+                        and perm_id=#{permId}
+                    </if>
+        </trim>
+        <if test="beginPos != null and beginPos!='' and pageSize != null  and pageSize !='' ">
+            limit #{beginPos},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getRolePermCountByMap" resultType="Integer"  parameterType="java.util.Map">
+        select count(*) from role_perm
+        <trim prefix="where" prefixOverrides="and | or">
+                <if test="id != null and id!=''">
+                    and id=#{id}
+                </if>
+                <if test="permId != null and permId!=''">
+                    and perm_id=#{permId}
+                </if>
+                <if test="roleId != null and roleId!=''">
+                    and role_id=#{roleId}
+                </if>
+        </trim>
+    </select>
+
+    <insert id="insertRolePerm" parameterType="com.deepblue.punchcard.entity.RolePerm">
+        insert into role_perm(
+                        perm_id,
+                        role_id)
+        values(
+                     #{permId},
+                    #{roleId})
+    </insert>
+
+    <update id="updateRolePerm" parameterType="com.deepblue.punchcard.entity.RolePerm">
+        update role_perm
+        <trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
+                    <if test="id != null and id!=''">
+                        id=#{id},
+                    </if>
+                    <if test="permId != null and permId!=''">
+                        perm_id=#{permId},
+                    </if>
+                    <if test="roleId != null and roleId!=''">
+                        role_id=#{roleId}
+                    </if>
+        </trim>
+    </update>
+
+    <delete id="deleteRolePermById" parameterType="Long">
+        delete from role_perm where id = #{id}
+    </delete>
+</mapper>

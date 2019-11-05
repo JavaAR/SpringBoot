@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepblue.punchcard.dao.UserRoleMapper">
+
+
+    <select id="getRolesByUserId" parameterType="int" resultType="String">
+         select sr.role_value
+        from user_role ur
+        left join sys_role sr on ur.role_id = sr.id
+        where ur.user_id = #{id}
+        and sr.is_disable = 0
+    </select>
+
+
+    <select id="getUserRoleById" resultType="com.deepblue.punchcard.entity.UserRole">
+        select
+        id as id,
+        user_id as userId,
+        role_id as roleId
+        from user_role
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="id != null">
+                and id=#{id}
+            </if>
+        </trim>
+    </select>
+
+    <select id="getUserRoleListByMap" resultType="com.deepblue.punchcard.entity.UserRole" parameterType="java.util.Map">
+        select
+        id as id,
+        user_id as userId,
+        role_id as roleId
+        from user_role
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="id != null and id!=''">
+                and id=#{id}
+            </if>
+            <if test="userId != null and userId!=''">
+                and user_id=#{userId}
+            </if>
+        </trim>
+        <if test="beginPos != null and beginPos!='' and pageSize != null  and pageSize !='' ">
+            limit #{beginPos},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getUserRoleCountByMap" resultType="Integer" parameterType="java.util.Map">
+        select count(*) from user_role
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="id != null and id!=''">
+                and id=#{id}
+            </if>
+            <if test="userId != null and userId!=''">
+                and user_id=#{userId}
+            </if>
+            <if test="roleId != null and roleId!=''">
+                and role_id=#{roleId}
+            </if>
+        </trim>
+    </select>
+
+    <insert id="insertUserRole" parameterType="com.deepblue.punchcard.entity.UserRole">
+        insert into user_role(
+                        user_id,
+                        role_id)
+        values(
+                     #{userId},
+                    #{roleId})
+    </insert>
+
+    <update id="updateUserRole" parameterType="com.deepblue.punchcard.entity.UserRole">
+        update user_role
+        <trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
+            <if test="id != null and id!=''">
+                id=#{id},
+            </if>
+            <if test="userId != null and userId!=''">
+                user_id=#{userId},
+            </if>
+            <if test="roleId != null and roleId!=''">
+                role_id=#{roleId}
+            </if>
+        </trim>
+    </update>
+
+    <delete id="deleteUserRoleById" parameterType="Long">
+        delete from user_role where id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepblue.punchcard.dao.SysPermissionInitMapper">
+
+    <select id="getSysPermissionInitById" resultType="com.deepblue.punchcard.entity.SysPermissionInit" >
+        select
+                id as id,
+                url as url,
+                permission_init as permissionInit,
+                sort as sort
+        from sys_permission_init
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="id != null">
+                and id=#{id}
+            </if>
+        </trim>
+    </select>
+
+    <select id="getSysPermissionInitListByMap" resultType="com.deepblue.punchcard.entity.SysPermissionInit" parameterType="java.util.Map">
+        select
+                id as id,
+                url as url,
+                permission_init as permissionInit,
+                sort as sort
+        from sys_permission_init
+        <trim prefix="where" prefixOverrides="and | or">
+                    <if test="id != null and id!=''">
+                        and id=#{id}
+                    </if>
+                    <if test="url != null and url!=''">
+                        and url=#{url}
+                    </if>
+                    <if test="permissionInit != null and permissionInit!=''">
+                        and permission_init=#{permissionInit}
+                    </if>
+        </trim>
+        <if test="beginPos != null and beginPos!='' and pageSize != null  and pageSize !='' ">
+            limit #{beginPos},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getSysPermissionInitCountByMap" resultType="Integer"  parameterType="java.util.Map">
+        select count(*) from sys_permission_init
+        <trim prefix="where" prefixOverrides="and | or">
+                <if test="id != null and id!=''">
+                    and id=#{id}
+                </if>
+                <if test="url != null and url!=''">
+                    and url=#{url}
+                </if>
+                <if test="permissionInit != null and permissionInit!=''">
+                    and permission_init=#{permissionInit}
+                </if>
+                <if test="sort != null and sort!=''">
+                    and sort=#{sort}
+                </if>
+        </trim>
+    </select>
+
+    <insert id="insertSysPermissionInit" parameterType="com.deepblue.punchcard.entity.SysPermissionInit">
+        insert into sys_permission_init(
+                        url,
+                        permission_init,
+                        sort)
+        values(
+                     #{url},
+                     #{permissionInit},
+                    #{sort})
+    </insert>
+
+    <update id="updateSysPermissionInit" parameterType="com.deepblue.punchcard.entity.SysPermissionInit">
+        update sys_permission_init
+        <trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
+                    <if test="id != null and id!=''">
+                        id=#{id},
+                    </if>
+                    <if test="url != null and url!=''">
+                        url=#{url},
+                    </if>
+                    <if test="permissionInit != null and permissionInit!=''">
+                        permission_init=#{permissionInit},
+                    </if>
+                    <if test="sort != null and sort!=''">
+                        sort=#{sort}
+                    </if>
+        </trim>
+    </update>
+
+    <delete id="deleteSysPermissionInitById" parameterType="Long">
+        delete from sys_permission_init where id = #{id}
+    </delete>
+</mapper>

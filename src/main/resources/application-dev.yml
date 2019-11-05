@@ -69,7 +69,7 @@ spring:
     port: 25
     default-encoding: UTF-8
     username:
-    password: 
+    password:
 #配置测试环境访问路径
 server:
   servlet:

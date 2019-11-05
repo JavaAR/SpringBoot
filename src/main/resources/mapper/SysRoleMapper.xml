@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepblue.punchcard.dao.SysRoleMapper">
+
+    <select id="getSysRoleById" resultType="com.deepblue.punchcard.entity.SysRole" >
+        select
+                id as id,
+                role_name as roleName,
+                role_desc as roleDesc,
+                role_value as roleValue,
+                create_time as createTime,
+                update_time as updateTime,
+                is_disable as isDisable
+        from sys_role
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="id != null">
+                and id=#{id}
+            </if>
+        </trim>
+    </select>
+
+    <select id="getSysRoleListByMap" resultType="com.deepblue.punchcard.entity.SysRole" parameterType="java.util.Map">
+        select
+                id as id,
+                role_name as roleName,
+                role_desc as roleDesc,
+                role_value as roleValue,
+                create_time as createTime,
+                update_time as updateTime,
+                is_disable as isDisable
+        from sys_role
+        <trim prefix="where" prefixOverrides="and | or">
+                    <if test="id != null and id!=''">
+                        and id=#{id}
+                    </if>
+                    <if test="roleName != null and roleName!=''">
+                        and role_name=#{roleName}
+                    </if>
+                    <if test="roleDesc != null and roleDesc!=''">
+                        and role_desc=#{roleDesc}
+                    </if>
+                    <if test="roleValue != null and roleValue!=''">
+                        and role_value=#{roleValue}
+                    </if>
+                    <if test="createTime != null and createTime!=''">
+                        and create_time=#{createTime}
+                    </if>
+                    <if test="updateTime != null and updateTime!=''">
+                        and update_time=#{updateTime}
+                    </if>
+        </trim>
+        <if test="beginPos != null and beginPos!='' and pageSize != null  and pageSize !='' ">
+            limit #{beginPos},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getSysRoleCountByMap" resultType="Integer"  parameterType="java.util.Map">
+        select count(*) from sys_role
+        <trim prefix="where" prefixOverrides="and | or">
+                <if test="id != null and id!=''">
+                    and id=#{id}
+                </if>
+                <if test="roleName != null and roleName!=''">
+                    and role_name=#{roleName}
+                </if>
+                <if test="roleDesc != null and roleDesc!=''">
+                    and role_desc=#{roleDesc}
+                </if>
+                <if test="roleValue != null and roleValue!=''">
+                    and role_value=#{roleValue}
+                </if>
+                <if test="createTime != null and createTime!=''">
+                    and create_time=#{createTime}
+                </if>
+                <if test="updateTime != null and updateTime!=''">
+                    and update_time=#{updateTime}
+                </if>
+                <if test="isDisable != null and isDisable!=''">
+                    and is_disable=#{isDisable}
+                </if>
+        </trim>
+    </select>
+
+    <insert id="insertSysRole" parameterType="com.deepblue.punchcard.entity.SysRole">
+        insert into sys_role(
+                        role_name,
+                        role_desc,
+                        role_value,
+                        create_time,
+                        update_time,
+                        is_disable)
+        values(
+                     #{roleName},
+                     #{roleDesc},
+                     #{roleValue},
+                     #{createTime},
+                     #{updateTime},
+                    #{isDisable})
+    </insert>
+
+    <update id="updateSysRole" parameterType="com.deepblue.punchcard.entity.SysRole">
+        update sys_role
+        <trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
+                    <if test="id != null and id!=''">
+                        id=#{id},
+                    </if>
+                    <if test="roleName != null and roleName!=''">
+                        role_name=#{roleName},
+                    </if>
+                    <if test="roleDesc != null and roleDesc!=''">
+                        role_desc=#{roleDesc},
+                    </if>
+                    <if test="roleValue != null and roleValue!=''">
+                        role_value=#{roleValue},
+                    </if>
+                    <if test="createTime != null and createTime!=''">
+                        create_time=#{createTime},
+                    </if>
+                    <if test="updateTime != null and updateTime!=''">
+                        update_time=#{updateTime},
+                    </if>
+                    <if test="isDisable != null and isDisable!=''">
+                        is_disable=#{isDisable}
+                    </if>
+        </trim>
+    </update>
+
+    <delete id="deleteSysRoleById" parameterType="Long">
+        delete from sys_role where id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepblue.punchcard.dao.SysUserMapper">
+
+    <select id="getSysUserById" resultType="com.deepblue.punchcard.entity.SysUser" >
+        select
+                id as id,
+                user_name as userName,
+                password as password,
+                salt as salt
+        from sys_user
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="id != null">
+                and id=#{id}
+            </if>
+        </trim>
+    </select>
+
+    <select id="getSysUserListByMap" resultType="com.deepblue.punchcard.entity.SysUser" parameterType="java.util.Map">
+        select
+                id as id,
+                user_name as userName,
+                password as password,
+                salt as salt
+        from sys_user
+        <trim prefix="where" prefixOverrides="and | or">
+                    <if test="id != null and id!=''">
+                        and id=#{id}
+                    </if>
+                    <if test="userName != null and userName!=''">
+                        and user_name=#{userName}
+                    </if>
+                    <if test="password != null and password!=''">
+                        and password=#{password}
+                    </if>
+        </trim>
+        <if test="beginPos != null and beginPos!='' and pageSize != null  and pageSize !='' ">
+            limit #{beginPos},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getSysUserCountByMap" resultType="Integer"  parameterType="java.util.Map">
+        select count(*) from sys_user
+        <trim prefix="where" prefixOverrides="and | or">
+                <if test="id != null and id!=''">
+                    and id=#{id}
+                </if>
+                <if test="userName != null and userName!=''">
+                    and user_name=#{userName}
+                </if>
+                <if test="password != null and password!=''">
+                    and password=#{password}
+                </if>
+                <if test="salt != null and salt!=''">
+                    and salt=#{salt}
+                </if>
+        </trim>
+    </select>
+
+    <insert id="insertSysUser" parameterType="com.deepblue.punchcard.entity.SysUser">
+        insert into sys_user(
+                        user_name,
+                        password,
+                        salt)
+        values(
+                     #{userName},
+                     #{password},
+                    #{salt})
+    </insert>
+
+    <update id="updateSysUser" parameterType="com.deepblue.punchcard.entity.SysUser">
+        update sys_user
+        <trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
+                    <if test="id != null and id!=''">
+                        id=#{id},
+                    </if>
+                    <if test="userName != null and userName!=''">
+                        user_name=#{userName},
+                    </if>
+                    <if test="password != null and password!=''">
+                        password=#{password},
+                    </if>
+                    <if test="salt != null and salt!=''">
+                        salt=#{salt}
+                    </if>
+        </trim>
+    </update>
+
+    <delete id="deleteSysUserById" parameterType="Long">
+        delete from sys_user where id = #{id}
+    </delete>
+</mapper>
