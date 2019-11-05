@@ -62,6 +62,14 @@ spring:
     #超时时间
     timeout: 3000
     password:
+  #邮箱配置
+  mail:
+    protocol: smtp
+    host: smtp.163.com
+    port: 25
+    default-encoding: UTF-8
+    username: ar17536352497@163.com
+    password: R19971219
 #配置测试环境访问路径
 server:
   servlet:

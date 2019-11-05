@@ -38,6 +38,20 @@ public class ProjectConstants {
     }
 
     /**
+     *邮件实体类
+     */
+    public static class MailConstant{
+        //注册模板名
+        public static final String RETGISTER_TMPLATE="register";
+        //添加其他模板名
+
+        //存放模板路径
+        public static final String TMPLATE_PATH="src/main/resources/templates/MailTemplate";
+
+
+    }
+
+    /**
      * 添加其他内部类常量
      */
 
