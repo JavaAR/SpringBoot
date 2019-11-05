@@ -68,8 +68,8 @@ spring:
     host: smtp.163.com
     port: 25
     default-encoding: UTF-8
-    username: ar17536352497@163.com
-    password: R19971219
+    username:
+    password: 
 #配置测试环境访问路径
 server:
   servlet:
