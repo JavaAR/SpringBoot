@@ -19,7 +19,7 @@
         <!--版本号统一管理-->
         <java.version>1.8</java.version>
         <druid-version>1.0.29</druid-version>
-        <mysql-connector-version>5.1.38</mysql-connector-version>
+        <mysql-connector-version>8.0.16</mysql-connector-version>
         <swagger-version>2.4.0</swagger-version>
     </properties>
 
